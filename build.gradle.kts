@@ -38,6 +38,9 @@ kotlin {
                 implementation(compose.desktop.currentOs)
                 @OptIn(ExperimentalComposeLibrary::class) implementation(compose.material3)
                 implementation(compose.animationGraphics)
+                implementation(compose.materialIconsExtended)
+                implementation("androidx.paging:paging-runtime:3.1.1")
+                implementation("androidx.paging:paging-compose:1.0.0-alpha15")
                 implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.3")
                 implementation(kotlin("reflect"))
             }

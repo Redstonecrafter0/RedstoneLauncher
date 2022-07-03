@@ -1,6 +1,11 @@
 package net.redstonecraft.redstonelauncher
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Code
+import androidx.compose.material.icons.outlined.ManageAccounts
+import androidx.compose.material.icons.outlined.Settings
+import androidx.compose.material.icons.outlined.SportsEsports
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -29,8 +34,8 @@ fun App() {
                 Row {
                     NavigationRail(modifier = Modifier.shadow(20.dp).zIndex(1000F)) {
                         listOf(
-                            "Profiles" to CustomIcons.videoGame, "Java" to CustomIcons.code,
-                            "Settings" to CustomIcons.settings, "Accounts" to CustomIcons.accountSettings
+                            "Profiles" to Icons.Outlined.SportsEsports, "Java" to Icons.Outlined.Code,
+                            "Settings" to Icons.Outlined.Settings, "Accounts" to Icons.Outlined.ManageAccounts
                         ).forEachIndexed { index, (label, icon) ->
                             NavigationRailItem(index == page, onClick = { page = index }, icon = { Icon(icon, label) },
                                 label = { Text(label) })
