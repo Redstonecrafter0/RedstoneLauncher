@@ -1,0 +1,8 @@
+.gradle
+gradle
+build
+.idea/*
+!.idea/icon.svg
+*.iml
+out
+testInstallDir
