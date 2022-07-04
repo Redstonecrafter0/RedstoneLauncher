@@ -11,7 +11,7 @@ plugins {
 }
 
 group = "net.redstonecraft"
-version = "1.0.0"
+version = "0.0.1"
 
 idea {
     module {
@@ -39,8 +39,8 @@ kotlin {
                 @OptIn(ExperimentalComposeLibrary::class) implementation(compose.material3)
                 implementation(compose.animationGraphics)
                 implementation(compose.materialIconsExtended)
-                implementation("androidx.paging:paging-runtime:3.1.1")
-                implementation("androidx.paging:paging-compose:1.0.0-alpha15")
+//                implementation("androidx.paging:paging-runtime:3.1.1")
+//                implementation("androidx.paging:paging-compose:1.0.0-alpha15")
                 implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.3")
                 implementation(kotlin("reflect"))
             }
@@ -51,11 +51,10 @@ kotlin {
 compose.desktop {
     application {
         mainClass = "net.redstonecraft.redstonelauncher.MainKt"
-        jvmArgs += listOf("-cp", "./plugins/*")
         nativeDistributions {
             targetFormats(TargetFormat.Exe, TargetFormat.Msi, TargetFormat.Deb, TargetFormat.AppImage)
             packageName = "RedstoneLauncher"
-            packageVersion = version as String
+            packageVersion = version.toString()
             description = "A custom Minecraft Launcher"
             windows {
                 iconFile.set(projectDir.resolve("src/jvmMain/resources/icon.ico"))

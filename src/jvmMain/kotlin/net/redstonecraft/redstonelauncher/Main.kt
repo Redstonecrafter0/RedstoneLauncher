@@ -20,7 +20,7 @@ import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.*
 import androidx.compose.ui.zIndex
-import net.redstonecraft.redstonelauncher.components.Titlebar
+import net.redstonecraft.redstonelauncher.components.TitleBar
 import net.redstonecraft.redstonelauncher.pages.*
 import androidx.compose.material.MaterialTheme as MaterialTheme2
 
@@ -58,28 +58,39 @@ fun main() = application {
     val trayState = rememberTrayState()
 
     Tray(
-        icon = loadSvgPainter(Config::class.java.getResourceAsStream("/icon.svg")!!, Density(1F)),
+        icon = loadSvg("icon.svg"),
         state = trayState,
         tooltip = "RedstoneLauncher",
         onAction = {
             isOpen = true
         }
     ) {
+        if (!isOpen) {
+            Item("Show") {
+                isOpen = true
+            }
+        }
         Item("Exit", onClick = ::exitApplication)
     }
 
+    val windowState = WindowState(position = WindowPosition.Aligned(Alignment.Center))
+
     if (isOpen) {
         Window(
-            state = WindowState(position = WindowPosition.Aligned(Alignment.Center)),
+            state = windowState,
             onCloseRequest = { if (Config.save.closeOnExit) exitApplication() else isOpen = false },
             title = "RedstoneLauncher",
-            icon = loadSvgPainter(Config::class.java.getResourceAsStream("/icon.svg")!!, Density(1F)),
-//            undecorated = true
+            icon = loadSvg("icon.svg"),
+            undecorated = true
         ) {
-//          Column {
-//                Titlebar("RedstoneLauncher", loadSvgPainter(Config::class.java.getResourceAsStream("/icon.svg")!!, Density(1F)))
+          Column {
+                TitleBar("RedstoneLauncher", loadSvg("icon.svg"), windowState) {
+                    if (Config.save.closeOnExit) exitApplication() else isOpen = false
+                }
                 App()
-//            }
+            }
         }
     }
 }
+
+fun loadSvg(resource: String) = loadSvgPainter(Config::class.java.getResourceAsStream("/${resource}")!!, Density(1F))

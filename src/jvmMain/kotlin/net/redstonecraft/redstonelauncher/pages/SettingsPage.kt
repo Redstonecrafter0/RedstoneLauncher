@@ -18,10 +18,12 @@ import kotlin.reflect.KMutableProperty
 @Suppress("UNCHECKED_CAST")
 @Composable
 fun SettingsPage() {
-    val settings = listOf(
-        textSetting("Profiles Path", Config.save::profilesPath),
-        switchSetting("Close on Exit", Config.save::closeOnExit)
-    )
+    var updateSettings by remember { mutableStateOf(false) }
+    var settings = getSettings()
+    if (updateSettings) {
+        settings = getSettings()
+        updateSettings = false
+    }
     LazyColumn(Modifier.padding(25.dp, 5.dp, 5.dp, 5.dp)) {
         items(settings) {
             when (it.type) {
@@ -30,19 +32,33 @@ fun SettingsPage() {
             }
         }
         item {
-            Button(onClick = {
-                settings.forEach {
-                    if (it.state.value != it.oldValue) {
-                        it.property.setter.call(it.state.value)
+            Row {
+                Button(onClick = {
+                    settings.forEach {
+                        if (it.state.value != it.oldValue) {
+                            it.property.setter.call(it.state.value)
+                        }
+                    }
+                    Config.postModify()
+                    updateSettings = true
+                }, colors = LaunchColors) {
+                    Text("Save")
+                }
+                if (settings.any { it.oldValue != it.state.value }) {
+                    Card(Modifier.padding(7.dp), elevation = 5.dp, backgroundColor = Color(red = 228, green = 105, blue = 98)) {
+                        Text("There are unsaved changes.", Modifier.padding(8.dp), color = Color.White)
                     }
                 }
-                Config.postModify()
-            }, colors = LaunchColors) {
-                Text("Save")
             }
         }
     }
 }
+
+@Composable
+fun getSettings() = listOf(
+    textSetting("Profiles Path", Config.save::profilesPath),
+    switchSetting("Close on Exit", Config.save::closeOnExit)
+)
 
 @Composable
 fun textSetting(name: String, property: KMutableProperty<String>): SettingData<String> {

@@ -80,7 +80,7 @@ fun AddProfilePage(addingState: MutableState<Boolean>) {
 
                 var index by remember { mutableStateOf(0) }
 
-                ExposedDropDownMenu(platforms.map { it.first }, index, { index = it })
+                ExposedDropDownMenu(platforms.map { it.first }, index, { index = it }, Modifier.width(200.dp))
 
                 OutlinedTextField(name, { name = it }, label = {
                     Text("Name")

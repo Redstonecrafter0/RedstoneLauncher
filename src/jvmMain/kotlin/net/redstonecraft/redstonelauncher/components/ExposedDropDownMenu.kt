@@ -33,7 +33,7 @@ fun ExposedDropDownMenu(
     values: List<String>,
     selectedIndex: Int,
     onChange: (Int) -> Unit,
-    modifier: Modifier = Modifier,
+    modifier: Modifier = Modifier.width(IntrinsicSize.Min),
     backgroundColor: Color = MaterialTheme.colorScheme.background,
     shape: Shape = androidx.compose.material.MaterialTheme.shapes.medium
 ) {
@@ -50,7 +50,7 @@ fun ExposedDropDownMenu(
 
     val focusManager = LocalFocusManager.current
 
-    Column(modifier = modifier.width(IntrinsicSize.Min)) {
+    Column(modifier = modifier) {
         Box(
             Modifier.border(indicatorWidth, indicatorColor, androidx.compose.material.MaterialTheme.shapes.medium)
         ) {
