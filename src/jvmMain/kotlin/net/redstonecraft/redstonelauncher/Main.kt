@@ -7,11 +7,7 @@ import androidx.compose.material.icons.outlined.ManageAccounts
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material.icons.outlined.SportsEsports
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
@@ -20,6 +16,8 @@ import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.*
 import androidx.compose.ui.zIndex
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import net.redstonecraft.redstonelauncher.components.TitleBar
 import net.redstonecraft.redstonelauncher.pages.*
 import androidx.compose.material.MaterialTheme as MaterialTheme2
@@ -53,41 +51,49 @@ fun App() {
     }
 }
 
-fun main() = application {
-    var isOpen by remember { mutableStateOf(true) }
-    val trayState = rememberTrayState()
-
-    Tray(
-        icon = loadSvg("icon.svg"),
-        state = trayState,
-        tooltip = "RedstoneLauncher",
-        onAction = {
+fun main() {
+    application {
+        var isOpen by remember { mutableStateOf(true) }
+        val scope = rememberCoroutineScope()
+        RedstoneLauncher.openCallback = { scope.launch {
+            isOpen = false
+            delay(10)
             isOpen = true
-        }
-    ) {
-        if (!isOpen) {
-            Item("Show") {
+        } }
+        val trayState = rememberTrayState()
+
+        Tray(
+            icon = loadSvg("icon.svg"),
+            state = trayState,
+            tooltip = "RedstoneLauncher",
+            onAction = {
                 isOpen = true
             }
-        }
-        Item("Exit", onClick = ::exitApplication)
-    }
-
-    val windowState = WindowState(position = WindowPosition.Aligned(Alignment.Center))
-
-    if (isOpen) {
-        Window(
-            state = windowState,
-            onCloseRequest = { if (Config.save.closeOnExit) exitApplication() else isOpen = false },
-            title = "RedstoneLauncher",
-            icon = loadSvg("icon.svg"),
-            undecorated = true
         ) {
-          Column {
-                TitleBar("RedstoneLauncher", loadSvg("icon.svg"), windowState) {
-                    if (Config.save.closeOnExit) exitApplication() else isOpen = false
+            if (!isOpen) {
+                Item("Show") {
+                    isOpen = true
                 }
-                App()
+            }
+            Item("Exit", onClick = ::exitApplication)
+        }
+
+        val windowState = WindowState(position = WindowPosition.Aligned(Alignment.Center))
+
+        if (isOpen) {
+            Window(
+                state = windowState,
+                onCloseRequest = { if (Config.save.closeOnExit) exitApplication() else isOpen = false },
+                title = "RedstoneLauncher",
+                icon = loadSvg("icon.svg"),
+                undecorated = true
+            ) {
+              Column {
+                    TitleBar("RedstoneLauncher", loadSvg("icon.svg"), windowState) {
+                        if (Config.save.closeOnExit) exitApplication() else isOpen = false
+                    }
+                    App()
+                }
             }
         }
     }
