@@ -7,6 +7,6 @@
    xmlns="http://www.w3.org/2000/svg">
   <g>
     <rect width="60" height="30" fill="#2C2C2C"/>
-    <line x1="25" y1="20" x2="35" y2="20" stroke="#FBFBFB"/>
+    <line x1="25" y1="15" x2="35" y2="15" stroke="#FBFBFB"/>
   </g>
 </svg>

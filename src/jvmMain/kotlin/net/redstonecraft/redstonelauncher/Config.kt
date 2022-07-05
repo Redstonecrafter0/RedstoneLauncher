@@ -12,7 +12,7 @@ import java.io.File
 data class Config(
     var profilesPath: String,
     val profiles: MutableList<Profile> = mutableListOf(),
-    val githubAccounts: MutableList<GitHubAccount> = mutableListOf(),
+    val githubAccounts: MutableList<String> = mutableListOf(),
     var closeOnExit: Boolean = false
 ) {
 
@@ -57,6 +57,3 @@ data class Config(
     }
 
 }
-
-@Serializable
-data class GitHubAccount(val username: String, val password: String)

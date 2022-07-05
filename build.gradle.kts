@@ -43,6 +43,11 @@ kotlin {
 //                implementation("androidx.paging:paging-compose:1.0.0-alpha15")
                 implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.3")
                 implementation(kotlin("reflect"))
+                implementation("com.microsoft.alm:auth-secure-storage:0.6.4") {
+                    exclude(group = "net.java.dev.jna", module = "jna")
+                }
+                implementation("org.purejava:kdewallet:1.2.7")
+                implementation("net.java.dev.jna:jna:5.12.1")
             }
         }
     }

@@ -1,5 +1,6 @@
 package net.redstonecraft.redstonelauncher
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Code
@@ -11,6 +12,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.loadSvgPainter
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
@@ -30,7 +32,7 @@ fun App() {
         MaterialTheme2(Settings.theme2) {
             Surface(Modifier.fillMaxSize()) {
                 Row {
-                    NavigationRail(modifier = Modifier.shadow(20.dp).zIndex(1000F)) {
+                    NavigationRail(modifier = Modifier.shadow(20.dp).zIndex(1000F), containerColor = Color(0xFF121212)) {
                         listOf(
                             "Profiles" to Icons.Outlined.SportsEsports, "Java" to Icons.Outlined.Code,
                             "Settings" to Icons.Outlined.Settings, "Accounts" to Icons.Outlined.ManageAccounts
