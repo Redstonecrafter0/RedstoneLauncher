@@ -1,6 +1,8 @@
 package net.redstonecraft.redstonelauncher.components
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsHoveredAsState
 import androidx.compose.foundation.layout.*
@@ -19,17 +21,31 @@ import androidx.compose.ui.window.WindowPlacement
 import androidx.compose.ui.window.WindowPosition
 import androidx.compose.ui.window.WindowScope
 import androidx.compose.ui.window.WindowState
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import net.redstonecraft.redstonelauncher.loadSvg
 import java.awt.GraphicsEnvironment
 import java.awt.Toolkit
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun WindowScope.TitleBar(title: String, icon: Painter, windowState: WindowState, onExit: () -> Unit) {
     var size by remember { mutableStateOf(windowState.size) }
     var position by remember { mutableStateOf(windowState.position) }
     val maxDimensions = getEffectiveScreenSize()
     if (windowState.placement != WindowPlacement.Fullscreen) {
-        WindowDraggableArea(Modifier.height(30.dp).fillMaxWidth().background(Color(0xFF121212))) {
+        WindowDraggableArea(Modifier.height(30.dp).fillMaxWidth().background(Color(0xFF080808)).combinedClickable(onDoubleClick = {
+            if (windowState.size to windowState.position == maxDimensions) {
+                windowState.size = size
+                windowState.position = position
+            } else {
+                size = windowState.size
+                position = windowState.position
+                val (maxSize, maxPosition) = maxDimensions
+                windowState.size = maxSize
+                windowState.position = maxPosition
+            }
+        }) {}) {
             Row(Modifier.fillMaxWidth(), Arrangement.SpaceBetween) {
                 Row {
                     Icon(icon, "", Modifier.padding(5.dp), Color.Unspecified)
