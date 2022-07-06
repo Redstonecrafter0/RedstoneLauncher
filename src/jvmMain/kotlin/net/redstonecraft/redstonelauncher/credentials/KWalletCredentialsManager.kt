@@ -35,4 +35,6 @@ class KWalletCredentialsManager: CredentialsManager() {
     override fun remove(id: String) {
         service.removeEntry(handle, folder, id, appId)
     }
+
+    override fun isSecure() = true
 }

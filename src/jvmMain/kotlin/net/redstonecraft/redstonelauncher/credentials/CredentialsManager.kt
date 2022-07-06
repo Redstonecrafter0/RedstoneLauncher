@@ -23,6 +23,7 @@ abstract class CredentialsManager {
     abstract fun write(id: String, credentials: Credentials)
     abstract fun read(id: String): Credentials?
     abstract fun remove(id: String)
+    abstract fun isSecure(): Boolean
 
     operator fun set(id: String, credentials: Credentials) = write(id, credentials)
     operator fun get(id: String) = read(id)

@@ -1,3 +1,5 @@
+import org.apache.commons.compress.archivers.sevenz.SevenZArchiveEntry
+import org.apache.commons.compress.archivers.sevenz.SevenZFile
 import org.jetbrains.compose.ExperimentalComposeLibrary
 import org.jetbrains.compose.compose
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
@@ -48,6 +50,7 @@ kotlin {
                 }
                 implementation("org.purejava:kdewallet:1.2.7")
                 implementation("net.java.dev.jna:jna:5.12.1")
+                implementation(fileTree(projectDir.resolve("libs")))
             }
         }
     }
@@ -69,5 +72,29 @@ compose.desktop {
                 iconFile.set(projectDir.resolve("src/jvmMain/resources/icon.png"))
             }
         }
+    }
+}
+
+tasks.register("setupCef") {
+    doLast {
+        println("Extracting jcef natives")
+        val natives = projectDir.resolve("testInstallDir/natives")
+        SevenZFile(projectDir.resolve("jcef_natives.7z")).use {
+            var entry: SevenZArchiveEntry? = it.nextEntry
+            while (entry != null) {
+                if (!entry.isDirectory) {
+                    println("Extracting ${entry.name}")
+                    val buffer = ByteArray(entry.size.toInt())
+                    it.read(buffer, 0, buffer.size)
+                    val file = File(natives, entry.name)
+                    if (file.canonicalPath.startsWith(natives.canonicalPath)) {
+                        if (!(file.parentFile.exists() && file.parentFile.isDirectory)) file.parentFile.mkdirs()
+                        file.writeBytes(buffer)
+                    }
+                }
+                entry = it.nextEntry
+            }
+        }
+        println("done")
     }
 }

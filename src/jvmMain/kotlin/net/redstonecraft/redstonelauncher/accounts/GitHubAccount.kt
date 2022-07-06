@@ -101,7 +101,7 @@ fun AddGitHubAccount(addingState: MutableState<Boolean>) {
     }
 }
 
-private fun randomString(size: Int): String {
+fun randomString(size: Int): String {
     val bytes = ByteArray(size)
     SecureRandom.getInstanceStrong().nextBytes(bytes)
     return Base64.getUrlEncoder().encodeToString(bytes)

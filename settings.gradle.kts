@@ -14,5 +14,16 @@ pluginManagement {
     }
 }
 
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath("org.apache.commons:commons-compress:1.21")
+        classpath("org.tukaani:xz:1.9")
+    }
+}
+
 rootProject.name = "RedstoneLauncher"
 

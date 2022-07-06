@@ -13,6 +13,7 @@ data class Config(
     var profilesPath: String,
     val profiles: MutableList<Profile> = mutableListOf(),
     val githubAccounts: MutableList<String> = mutableListOf(),
+    val microsoftAccounts: MutableList<String> = mutableListOf(),
     var closeOnExit: Boolean = false
 ) {
 

@@ -19,4 +19,6 @@ class FileCredentialsManager: CredentialsManager() {
     override fun remove(id: String) {
         back.delete(id)
     }
+
+    override fun isSecure() = false
 }

@@ -3,6 +3,7 @@ package net.redstonecraft.redstonelauncher.pages
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.Card
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
@@ -16,6 +17,7 @@ import net.redstonecraft.redstonelauncher.accounts.AddGitHubAccount
 import net.redstonecraft.redstonelauncher.accounts.AddMicrosoftAccount
 import net.redstonecraft.redstonelauncher.accounts.GitHubAccount
 import net.redstonecraft.redstonelauncher.components.ExposedDropDownMenu
+import net.redstonecraft.redstonelauncher.credentials.CredentialsManager
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -34,10 +36,20 @@ fun AccountSettingsPage() {
                 adding = true
             }) { Icon(Icons.Filled.Add, "") } }) {
                 LazyColumn(Modifier.padding(10.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                    if (!CredentialsManager.currentImpl.isSecure()) {
+                        item {
+                            Card(Modifier.fillMaxWidth(), backgroundColor = Color(red = 228, green = 105, blue = 98), elevation = 5.dp) {
+                                Text("Warning: Using insecure storage for credentials.", Modifier.padding(15.dp))
+                            }
+                        }
+                    }
                     items(Config.save.githubAccounts.map { it to "gh" }) { (name, type) ->
                         when (type) {
                             "gh" -> GitHubAccount(name, updateState)
                         }
+                    }
+                    item {
+                        Spacer(Modifier.height(65.dp))
                     }
                 }
             }

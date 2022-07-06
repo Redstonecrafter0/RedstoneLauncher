@@ -20,4 +20,6 @@ class GnomeCredentialsManager: CredentialsManager() {
     override fun remove(id: String) {
         back.delete(id)
     }
+
+    override fun isSecure() = back.isSecure
 }
