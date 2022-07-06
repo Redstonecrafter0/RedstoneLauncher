@@ -15,18 +15,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toComposeImageBitmap
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
 import net.redstonecraft.redstonelauncher.Config
 import net.redstonecraft.redstonelauncher.CustomIcons
 import net.redstonecraft.redstonelauncher.credentials.CredentialsManager
 import net.redstonecraft.redstonelauncher.web.MSALogin
 import org.jetbrains.skia.Image
-import java.net.URL
 import kotlin.concurrent.thread
 
 @Composable
@@ -65,24 +59,26 @@ fun AddMicrosoftAccount(addingState: MutableState<Boolean>) {
 
     OutlinedTextField(username, {}, readOnly = true, singleLine = true, label = { Text("Username") }, colors = TextFieldDefaults.textFieldColors(textColor = Color.White))
     OutlinedButton({
-        MSALogin { accessToken, refreshToken, userId, validUntil ->
-//            scope.launch {
-//                withContext(Dispatchers.IO) {
-//                    val conn = URL("https://user.auth.xboxlive.com/user/authenticate").openConnection()
-//                    conn.setRequestProperty("Content-Type", "application/json")
-//                    conn.setRequestProperty("Accept", "application/json")
-//                    conn.doInput = true
-//                    conn.doOutput = true
-//                    conn.outputStream.write(Json.encodeToString(
-//                        XBoxLiveAuthRequest(
-//                            XBoxLiveAuthRequest.PropertiesData("RPS", "user.auth.xboxlive.com", accessToken),
-//                            "http://auth.xboxlive.com",
-//                            "JWT"
-//                        )
-//                    ).encodeToByteArray())
-//                    conn.outputStream.close()
+        thread {
+            MSALogin { accessToken, refreshToken, userId, validUntil ->
+//                scope.launch {
+//                    withContext(Dispatchers.IO) {
+//                        val conn = URL("https://user.auth.xboxlive.com/user/authenticate").openConnection()
+//                        conn.setRequestProperty("Content-Type", "application/json")
+//                        conn.setRequestProperty("Accept", "application/json")
+//                        conn.doInput = true
+//                        conn.doOutput = true
+//                        conn.outputStream.write(Json.encodeToString(
+//                            XBoxLiveAuthRequest(
+//                                XBoxLiveAuthRequest.PropertiesData("RPS", "user.auth.xboxlive.com", accessToken),
+//                                "http://auth.xboxlive.com",
+//                                "JWT"
+//                            )
+//                        ).encodeToByteArray())
+//                        conn.outputStream.close()
+//                    }
 //                }
-//            }
+            }
         }
     }) {
         Text("Login")

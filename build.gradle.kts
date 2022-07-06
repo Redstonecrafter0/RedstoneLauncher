@@ -79,7 +79,12 @@ tasks.register("setupCef") {
     doLast {
         println("Extracting jcef natives")
         val natives = projectDir.resolve("testInstallDir/natives")
-        SevenZFile(projectDir.resolve("jcef_natives.7z")).use {
+        val os = System.getProperty("os.name").toLowerCase()
+        SevenZFile(projectDir.resolve("jcef_natives_${when {
+            "win" in os -> "win64"
+            "linux" in os -> "linux64"
+            else -> error("Unknown system") 
+        }}.7z")).use {
             var entry: SevenZArchiveEntry? = it.nextEntry
             while (entry != null) {
                 if (!entry.isDirectory) {
