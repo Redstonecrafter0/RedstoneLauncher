@@ -1,7 +1,7 @@
 package net.redstonecraft.redstonelauncher
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Code
 import androidx.compose.material.icons.outlined.ManageAccounts
@@ -33,12 +33,20 @@ fun App() {
             Surface(Modifier.fillMaxSize()) {
                 Row {
                     NavigationRail(modifier = Modifier.shadow(20.dp).zIndex(1000F), containerColor = Color(0xFF121212)) {
-                        listOf(
-                            "Profiles" to Icons.Outlined.SportsEsports, "Java" to Icons.Outlined.Code,
-                            "Settings" to Icons.Outlined.Settings, "Accounts" to Icons.Outlined.ManageAccounts
-                        ).forEachIndexed { index, (label, icon) ->
-                            NavigationRailItem(index == page, onClick = { page = index }, icon = { Icon(icon, label) },
-                                label = { Text(label) })
+                        Column(verticalArrangement = Arrangement.SpaceBetween) {
+                            listOf(
+                                "Profiles" to Icons.Outlined.SportsEsports, "Java" to Icons.Outlined.Code,
+                                "Settings" to Icons.Outlined.Settings, "Accounts" to Icons.Outlined.ManageAccounts
+                            ).forEachIndexed { index, (label, icon) ->
+                                NavigationRailItem(index == page, onClick = { page = index }, icon = { Icon(icon, label) },
+                                    label = { Text(label) })
+                            }
+                            var updateDownloads by remember { RedstoneLauncher.updateDownloadIndicatorState }
+                            if (updateDownloads) {
+                                updateDownloads = false
+                            } else if (RedstoneLauncher.runningDownloads.isNotEmpty()) {
+                                CircularProgressIndicator(RedstoneLauncher.runningDownloads.values.average().toFloat())
+                            }
                         }
                     }
                     when (page) {

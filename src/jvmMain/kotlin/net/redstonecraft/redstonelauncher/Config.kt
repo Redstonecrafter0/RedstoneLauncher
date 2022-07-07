@@ -5,12 +5,14 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import net.redstonecraft.redstonelauncher.api.OS
 import net.redstonecraft.redstonelauncher.pages.Profile
 import java.io.File
 
 @Serializable
 data class Config(
     var profilesPath: String,
+    var javaPath: String,
     val profiles: MutableList<Profile> = mutableListOf(),
     val githubAccounts: MutableList<String> = mutableListOf(),
     val microsoftAccounts: MutableList<String> = mutableListOf(),
@@ -33,7 +35,9 @@ data class Config(
             configFile.writeText(json.encodeToString(config))
         }
 
-        private val defaultConfig = Config(File(System.getProperty("user.home")).resolve("RedstoneLauncher/Profiles").absolutePath)
+        private val userHome = File(System.getProperty("user.home"))
+
+        private val defaultConfig = Config(userHome.resolve("RedstoneLauncher/Profiles").absolutePath, userHome.resolve("RedstoneLauncher/Java").absolutePath)
 
         val configFile = File(System.getProperty("user.home")).resolve("RedstoneLauncher/config.json")
 
@@ -52,6 +56,51 @@ data class Config(
             ).forEach {
                 if (!it.exists()) {
                     it.mkdirs()
+                }
+            }
+        }
+    }
+
+    class JavaInstall(
+        val javaProgram: File,
+        val dir: File,
+        val icon: File?,
+        val name: String,
+        val version: List<Int>,
+        val jdk: Boolean,
+        var installing: Boolean = false
+    ) {
+
+        companion object {
+            val javaInstalls = File(save.javaPath).listFiles()!!.filter { it.isDirectory }.mapNotNull { create(it) }
+
+            fun create(dir: File): JavaInstall? {
+                try {
+                    val javaProgram = when (OS.current) {
+                        OS.WINDOWS -> dir.resolve("bin/java.exe")
+                        OS.LINUX -> dir.resolve("bin/java")
+                    }
+                    val icon = dir.resolve("icon.png")
+                        .let { if (!it.exists() || !it.isFile) null else it }
+                    val name = dir.resolve("name.txt")
+                        .let { if (it.exists() && it.isFile) it else null }?.readText()
+                    val version = dir.resolve("version.txt")
+                        .let { if (it.exists() && it.isFile) it else null }
+                        ?.readText()
+                        ?.split(".")
+                        ?.mapNotNull { it.toIntOrNull() }
+                        ?.let { if (it.size != 4) null else it }
+                    val jdk = dir.resolve("jdk.txt").exists()
+                    return if (javaProgram.exists()
+                        && javaProgram.isFile
+                        && name != null
+                        && version != null) {
+                        JavaInstall(javaProgram, dir, icon, name, version, jdk)
+                    } else {
+                        null
+                    }
+                } catch (_: Exception) {
+                    return null
                 }
             }
         }

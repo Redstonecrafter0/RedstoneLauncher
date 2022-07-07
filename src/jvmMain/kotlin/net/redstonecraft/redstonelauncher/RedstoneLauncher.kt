@@ -1,11 +1,25 @@
 package net.redstonecraft.redstonelauncher
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import com.sun.net.httpserver.HttpServer
 import java.net.InetSocketAddress
 import java.net.URLDecoder
 import java.util.concurrent.Executors
 
 object RedstoneLauncher {
+
+    val updateDownloadIndicatorState = mutableStateOf(true)
+
+    var updateDownloadIndicator by updateDownloadIndicatorState
+        private set
+
+    val runningDownloads = mutableMapOf<String, Double>()
+        get() {
+            updateDownloadIndicator = true
+            return field
+        }
 
     var openCallback: (() -> Unit) = {}
     var githubAuthCallback: ((Map<String, String>) -> Unit) = {}

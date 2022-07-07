@@ -123,9 +123,7 @@ fun AddMicrosoftAccount(addingState: MutableState<Boolean>) {
         }
     }
     if (loading) {
-        Card(Modifier.padding(5.dp), backgroundColor = Color(red = 228, green = 105, blue = 98)) {
-            Text("Loading...", Modifier.padding(20.dp))
-        }
+        CircularProgressIndicator(Modifier.padding(5.dp))
     }
 }
 

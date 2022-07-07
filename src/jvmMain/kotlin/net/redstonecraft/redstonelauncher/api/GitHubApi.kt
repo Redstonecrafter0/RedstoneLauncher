@@ -21,7 +21,7 @@ object GitHubApi {
         req.setRequestProperty("Accept", accept)
         return req.getInputStream().readAllBytes().decodeToString()
     }
-}
 
-@Serializable
-data class GitHubApiUser(val login: String)
+    @Serializable
+    data class GitHubApiUser(val login: String)
+}

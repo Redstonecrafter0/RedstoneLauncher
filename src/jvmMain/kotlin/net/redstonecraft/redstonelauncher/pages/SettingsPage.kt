@@ -57,6 +57,7 @@ fun SettingsPage() {
 @Composable
 fun getSettings() = listOf(
     textSetting("Profiles Path", Config.save::profilesPath),
+    textSetting("Java Path", Config.save::javaPath),
     switchSetting("Close on Exit", Config.save::closeOnExit)
 )
 
