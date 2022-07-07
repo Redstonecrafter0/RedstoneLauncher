@@ -61,7 +61,7 @@ fun ExposedDropDownMenu(
                 }.padding(start = 16.dp, end = 12.dp, top = 7.dp, bottom = 10.dp)) {
                 Column(Modifier.padding(end = 32.dp)) {
                     Text(
-                        text = values.getOrElse(selectedIndex) { "Loading" }, modifier = Modifier.padding(top = 7.dp)
+                        text = values.getOrElse(selectedIndex) { "Unknown" }, modifier = Modifier.padding(top = 7.dp)
                     )
                 }
                 Icon(

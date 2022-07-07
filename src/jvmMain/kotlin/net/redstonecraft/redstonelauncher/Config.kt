@@ -11,8 +11,8 @@ import java.io.File
 
 @Serializable
 data class Config(
-    var profilesPath: String,
-    var javaPath: String,
+    var profilesPath: String = userHome.resolve("RedstoneLauncher/Profiles").absolutePath,
+    var javaPath: String = userHome.resolve("RedstoneLauncher/Java").absolutePath,
     val profiles: MutableList<Profile> = mutableListOf(),
     val githubAccounts: MutableList<String> = mutableListOf(),
     val microsoftAccounts: MutableList<String> = mutableListOf(),
@@ -37,7 +37,7 @@ data class Config(
 
         private val userHome = File(System.getProperty("user.home"))
 
-        private val defaultConfig = Config(userHome.resolve("RedstoneLauncher/Profiles").absolutePath, userHome.resolve("RedstoneLauncher/Java").absolutePath)
+        private val defaultConfig = Config()
 
         val configFile = File(System.getProperty("user.home")).resolve("RedstoneLauncher/config.json")
 
@@ -72,7 +72,7 @@ data class Config(
     ) {
 
         companion object {
-            val javaInstalls = File(save.javaPath).listFiles()!!.filter { it.isDirectory }.mapNotNull { create(it) }
+            val javaInstalls = File(save.javaPath).listFiles().let { File(save.javaPath).apply { mkdirs() }.listFiles() }!!.filter { it.isDirectory }.mapNotNull { create(it) }
 
             fun create(dir: File): JavaInstall? {
                 try {

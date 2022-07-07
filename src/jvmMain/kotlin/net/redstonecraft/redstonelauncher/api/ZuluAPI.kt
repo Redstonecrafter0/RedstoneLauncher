@@ -10,9 +10,13 @@ object ZuluAPI: JavaAPI {
         return request().map { it.java_version.first() }
     }
 
-    override fun getVersion(version: Int, jdk: Boolean): JavaPackage {
-        val v = request(jdk).first { it.java_version.first() == version }
-        return JavaPackage(v.name, v.url, listOf(v.java_version[0], v.java_version.getOrElse(1) { 0 }, v.java_version.getOrElse(2) { 0 }, v.java_version.getOrElse(3) { 0 }))
+    override fun getVersion(version: Int, jdk: Boolean): JavaPackage? {
+        return try {
+            val v = request(jdk).first { it.java_version.first() == version }
+            JavaPackage(v.name, v.url, listOf(v.java_version[0], v.java_version.getOrElse(1) { 0 }, v.java_version.getOrElse(2) { 0 }, v.java_version.getOrElse(3) { 0 }))
+        } catch (_: Throwable) {
+            null
+        }
     }
 
     fun request(jdk: Boolean = true): List<Versions.Version> {

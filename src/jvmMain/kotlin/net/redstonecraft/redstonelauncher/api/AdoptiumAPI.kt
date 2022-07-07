@@ -14,10 +14,14 @@ object AdoptiumAPI: JavaAPI {
         return Json.decodeFromString<AvailableReleases>(request("https://api.adoptium.net/v3/info/available_releases")).available_releases
     }
 
-    override fun getVersion(version: Int, jdk: Boolean): JavaPackage {
-        val response = json.decodeFromString<Versions>("{\"data\": ${request("https://api.adoptium.net/v3/assets/latest/$version/hotspot?architecture=x64&image_type=${if (jdk) "jdk" else "jre"}&os=${OS.current.name.lowercase()}&vendor=eclipse")}}").data.first()
-        val v = response.version
-        return JavaPackage(response.binary.`package`.name, response.binary.`package`.link, listOf(v.major, v.minor, v.security, v.build), response.binary.`package`.checksum, "SHA-256")
+    override fun getVersion(version: Int, jdk: Boolean): JavaPackage? {
+        return try {
+            val response = json.decodeFromString<Versions>("{\"data\": ${request("https://api.adoptium.net/v3/assets/latest/$version/hotspot?architecture=x64&image_type=${if (jdk) "jdk" else "jre"}&os=${OS.current.name.lowercase()}&vendor=eclipse")}}").data.first()
+            val v = response.version
+            JavaPackage(response.binary.`package`.name, response.binary.`package`.link, listOf(v.major, v.minor, v.security, v.build), response.binary.`package`.checksum, "SHA-256")
+        } catch (_: Throwable) {
+            null
+        }
     }
 
     @Serializable

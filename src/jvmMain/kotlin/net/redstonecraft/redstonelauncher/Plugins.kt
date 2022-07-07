@@ -15,8 +15,14 @@ object Plugins {
     val plugins = Config.installationDir
         .resolve("plugins")
         .listFiles { _, it -> it.endsWith(".jar") }!!
-        .map { JarFile(it) }
-        .map { Json.decodeFromString<Plugin>(it.getInputStream(it.getEntry("plugin.json")).readAllBytes().decodeToString()) }
+        .mapNotNull {
+            try {
+                val jar = JarFile(it)
+                Json.decodeFromString<Plugin>(jar.getInputStream(jar.getEntry("plugin.json")).readAllBytes().decodeToString())
+            } catch (_: Throwable) {
+                null
+            }
+        }
 }
 
 @Serializable
