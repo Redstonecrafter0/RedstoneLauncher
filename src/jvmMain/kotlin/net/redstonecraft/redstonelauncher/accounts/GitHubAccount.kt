@@ -84,13 +84,12 @@ fun AddGitHubAccount(addingState: MutableState<Boolean>) {
     }
 
     OutlinedTextField(account.first, {}, readOnly = true, singleLine = true, label = { Text("Username") }, colors = TextFieldDefaults.textFieldColors(textColor = Color.White))
-    Spacer(Modifier.height(20.dp))
+    Spacer(Modifier.height(5.dp))
     OutlinedButton({
         Desktop.getDesktop().browse(URI.create("https://github.com/login/oauth/authorize?client_id=c142b194f00f7aeee6ba&scope=repo&state=${state}"))
     }) {
         Text("Choose Account")
     }
-    Spacer(Modifier.height(20.dp))
     OutlinedButton({
         CredentialsManager.currentImpl.write("redstonelauncher.github.${account.first}", Credentials(account.first, account.second))
         Config.save.githubAccounts += account.first

@@ -16,6 +16,7 @@ import net.redstonecraft.redstonelauncher.Config
 import net.redstonecraft.redstonelauncher.accounts.AddGitHubAccount
 import net.redstonecraft.redstonelauncher.accounts.AddMicrosoftAccount
 import net.redstonecraft.redstonelauncher.accounts.GitHubAccount
+import net.redstonecraft.redstonelauncher.accounts.MicrosoftAccount
 import net.redstonecraft.redstonelauncher.components.ExposedDropDownMenu
 import net.redstonecraft.redstonelauncher.credentials.CredentialsManager
 
@@ -43,9 +44,10 @@ fun AccountSettingsPage() {
                             }
                         }
                     }
-                    items(Config.save.githubAccounts.map { it to "gh" }) { (name, type) ->
+                    items(Config.save.githubAccounts.map { it to "gh" } + Config.save.microsoftAccounts.map { it to "msa" }) { (name, type) ->
                         when (type) {
                             "gh" -> GitHubAccount(name, updateState)
+                            "msa" -> MicrosoftAccount(name, updateState)
                         }
                     }
                     item {

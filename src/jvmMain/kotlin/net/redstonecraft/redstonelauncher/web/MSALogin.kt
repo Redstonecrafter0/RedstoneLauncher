@@ -16,7 +16,7 @@ import java.time.Instant
 import javax.imageio.ImageIO
 import javax.swing.JFrame
 
-class MSALogin(private val callback: (accessToken: String, refreshToken: String, userId: String, validUntil: Long) -> Unit): JFrame("RedstoneLauncher MSA Login") {
+class MSALogin(private val callback: (accessToken: String, refreshToken: String, validUntil: Long) -> Unit): JFrame("RedstoneLauncher MSA Login") {
 
     companion object {
 
@@ -36,7 +36,6 @@ class MSALogin(private val callback: (accessToken: String, refreshToken: String,
         client.removeDisplayHandler()
         client.addDisplayHandler(object : CefDisplayHandlerAdapter() {
             override fun onAddressChange(browser: CefBrowser, frame: CefFrame, url: String) {
-                println(url)
                 if (url.startsWith("https://login.live.com/")) {
                     if (url.startsWith("https://login.live.com/oauth20_desktop.srf?lc=")) {
                         val data = url.split("#", limit = 2)[1].split("&").associate { it.split("=", limit = 2).let { i -> i[0] to URLDecoder.decode(i[1], Charsets.UTF_8) } }
@@ -44,8 +43,7 @@ class MSALogin(private val callback: (accessToken: String, refreshToken: String,
                             val accessToken = data["access_token"]!!
                             val validUntil = data["expires_in"]!!.toLong() * 1000 + Instant.now().toEpochMilli()
                             val refreshToken = data["refresh_token"]!!
-                            val userId = data["user_id"]!!
-                            callback(accessToken, refreshToken, userId, validUntil)
+                            callback(accessToken, refreshToken, validUntil)
                         }
                         isVisible = false
                         browser.close(false)
@@ -59,6 +57,7 @@ class MSALogin(private val callback: (accessToken: String, refreshToken: String,
                 }
             }
         })
+        isUndecorated = true
         iconImage = ImageIO.read(Config::class.java.getResourceAsStream("/icon.png"))
         contentPane.add(browser.uiComponent)
         defaultCloseOperation = HIDE_ON_CLOSE
