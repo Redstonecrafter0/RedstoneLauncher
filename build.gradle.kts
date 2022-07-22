@@ -50,6 +50,7 @@ kotlin {
                 }
                 implementation("org.purejava:kdewallet:1.2.7")
                 implementation("net.java.dev.jna:jna:5.12.1")
+                implementation("org.apache.commons:commons-compress:1.21")
                 implementation(fileTree(projectDir.resolve("libs")))
             }
         }
@@ -79,6 +80,7 @@ tasks.register("setupCef") {
     doLast {
         println("Extracting jcef natives")
         val natives = projectDir.resolve("testInstallDir/natives")
+        val dirPath = natives.canonicalPath
         if (natives.exists() && natives.isDirectory) {
             natives.deleteRecursively()
         }
@@ -95,7 +97,7 @@ tasks.register("setupCef") {
                     val buffer = ByteArray(entry.size.toInt())
                     it.read(buffer, 0, buffer.size)
                     val file = File(natives, entry.name)
-                    if (file.canonicalPath.startsWith(natives.canonicalPath)) {
+                    if (file.canonicalPath.startsWith(dirPath)) {
                         if (!(file.parentFile.exists() && file.parentFile.isDirectory)) file.parentFile.mkdirs()
                         file.writeBytes(buffer)
                     }

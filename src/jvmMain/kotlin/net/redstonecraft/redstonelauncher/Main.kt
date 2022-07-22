@@ -20,6 +20,7 @@ import androidx.compose.ui.window.*
 import androidx.compose.ui.zIndex
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import net.redstonecraft.redstonelauncher.components.GlobalProgressIndicator
 import net.redstonecraft.redstonelauncher.components.TitleBar
 import net.redstonecraft.redstonelauncher.pages.*
 import androidx.compose.material.MaterialTheme as MaterialTheme2
@@ -33,19 +34,21 @@ fun App() {
             Surface(Modifier.fillMaxSize()) {
                 Row {
                     NavigationRail(modifier = Modifier.shadow(20.dp).zIndex(1000F), containerColor = Color(0xFF121212)) {
-                        Column(verticalArrangement = Arrangement.SpaceBetween) {
-                            listOf(
-                                "Profiles" to Icons.Outlined.SportsEsports, "Java" to Icons.Outlined.Code,
-                                "Settings" to Icons.Outlined.Settings, "Accounts" to Icons.Outlined.ManageAccounts
-                            ).forEachIndexed { index, (label, icon) ->
-                                NavigationRailItem(index == page, onClick = { page = index }, icon = { Icon(icon, label) },
-                                    label = { Text(label) })
+                        Column(Modifier.fillMaxHeight(), Arrangement.SpaceBetween, Alignment.CenterHorizontally) {
+                            Column {
+                                listOf(
+                                    "Profiles" to Icons.Outlined.SportsEsports,
+                                    "Java" to Icons.Outlined.Code,
+                                    "Settings" to Icons.Outlined.Settings,
+                                    "Accounts" to Icons.Outlined.ManageAccounts
+                                ).forEachIndexed { index, (label, icon) ->
+                                    NavigationRailItem(index == page, onClick = { page = index }, icon = { Icon(icon, label) },
+                                        label = { Text(label) })
+                                }
                             }
-                            var updateDownloads by remember { RedstoneLauncher.updateDownloadIndicatorState }
-                            if (updateDownloads) {
-                                updateDownloads = false
-                            } else if (RedstoneLauncher.runningDownloads.isNotEmpty()) {
-                                CircularProgressIndicator(RedstoneLauncher.runningDownloads.values.average().toFloat())
+                            Column {
+                                GlobalProgressIndicator()
+                                Spacer(Modifier.height(20.dp))
                             }
                         }
                     }
