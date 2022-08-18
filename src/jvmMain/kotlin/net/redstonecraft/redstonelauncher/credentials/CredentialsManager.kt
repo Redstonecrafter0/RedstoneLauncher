@@ -1,6 +1,7 @@
 package net.redstonecraft.redstonelauncher.credentials
 
 import kotlinx.serialization.Serializable
+import org.freedesktop.dbus.messages.MethodCall
 
 abstract class CredentialsManager {
 
@@ -10,10 +11,13 @@ abstract class CredentialsManager {
             val os = System.getProperty("os.name").lowercase()
             when {
                 "win" in os -> WindowsCredentialsManager()
-                "linux" in os -> when {
-                    ProcessHandle.allProcesses().anyMatch { it.info().command().orElse(null) == "kwalletd" } -> KWalletCredentialsManager()
-                    ProcessHandle.allProcesses().anyMatch { it.info().command().orElse(null) == "gnome-keyring-daemon" } -> GnomeCredentialsManager()
-                    else -> FileCredentialsManager()
+                "linux" in os -> {
+                    MethodCall.setDefaultTimeout(9000000)
+                    when {
+                        ProcessHandle.allProcesses().anyMatch { it.info().command().orElse(null)?.split(" ")?.first()?.split("/")?.last() == "kwalletd5" } -> KWalletCredentialsManager()
+                        ProcessHandle.allProcesses().anyMatch { it.info().command().orElse(null)?.split(" ")?.first()?.split("/")?.last() == "gnome-keyring-daemon" } -> GnomeCredentialsManager()
+                        else -> FileCredentialsManager()
+                    }
                 }
                 else -> error("Unknown system")
             }

@@ -9,12 +9,12 @@ import org.kde.KWallet
 class KWalletCredentialsManager: CredentialsManager() {
 
     companion object {
-        private const val appId = "RedstoneLauncher"
-        private const val folder = "accounts"
+        private const val appId = "kdewallet"
+        private const val folder = "RedstoneLauncher"
     }
 
-    private val back = DBusConnectionBuilder.forSessionBus().withShared(false).build()
-    private val service = back.getRemoteObject("org.kde.kwalletd5", "/modules/kwallet5d", KWallet::class.java)
+    private val back = DBusConnectionBuilder.forSessionBus().withShared(false).withTimeout(900000).build()
+    private val service = back.getRemoteObject("org.kde.kwalletd5", "/modules/kwalletd5", KWallet::class.java)
     private val handle = service.open(appId, 0, appId)
 
     init {
