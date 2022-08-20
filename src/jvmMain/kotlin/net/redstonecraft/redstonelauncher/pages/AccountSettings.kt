@@ -23,7 +23,7 @@ import net.redstonecraft.redstonelauncher.credentials.CredentialsManager
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AccountSettingsPage() {
-    val addingState = remember { mutableStateOf(Config.save.githubAccounts.isEmpty()) }
+    val addingState = remember { mutableStateOf(Config.save.githubAccounts.isEmpty() && Config.save.microsoftAccounts.isEmpty()) }
     val updateState = remember { mutableStateOf(false) }
     var update by updateState
     var adding by addingState

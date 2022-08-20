@@ -1,5 +1,4 @@
 .gradle
-gradle
 build
 .idea/*
 !.idea/icon.svg
@@ -7,3 +6,4 @@ build
 out
 testInstallDir
 debug.log
+/resources
