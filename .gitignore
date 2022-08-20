@@ -2,6 +2,8 @@
 build
 .idea/*
 !.idea/icon.svg
+!.idea/gradle.xml
+!.idea/misc.xml
 *.iml
 out
 testInstallDir

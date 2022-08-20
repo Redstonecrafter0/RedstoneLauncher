@@ -1,0 +1,14 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="MainKt" type="JetRunConfigurationType" nameIsGenerated="true">
+    <envs>
+      <env name="REDSTONELAUNCHER_TESTING_INSTALLATION_DIR" value="." />
+    </envs>
+    <option name="MAIN_CLASS_NAME" value="net.redstonecraft.redstonelauncher.MainKt" />
+    <module name="RedstoneLauncher.jvmMain" />
+    <shortenClasspath name="NONE" />
+    <option name="WORKING_DIRECTORY" value="testInstallDir" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>
