@@ -1,5 +1,6 @@
 package net.redstonecraft.redstonelauncher
 
+import androidx.compose.runtime.Composer
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.decodeFromString
@@ -72,7 +73,12 @@ data class Config(
     ) {
 
         companion object {
-            val javaInstalls = File(save.javaPath).listFiles().let { File(save.javaPath).apply { mkdirs() }.listFiles() }!!.filter { it.isDirectory }.mapNotNull { create(it) }
+            val javaInstalls = File(save.javaPath)
+                .listFiles()
+                .let { File(save.javaPath).listFiles() }!!
+                .filter { it.isDirectory }
+                .mapNotNull { create(it) }
+                .toMutableList()
 
             fun create(dir: File): JavaInstall? {
                 try {

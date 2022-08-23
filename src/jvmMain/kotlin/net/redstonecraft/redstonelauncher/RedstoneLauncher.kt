@@ -15,12 +15,6 @@ object RedstoneLauncher {
     var updateDownloadIndicator by updateDownloadIndicatorState
         private set
 
-    val runningDownloads = mutableMapOf<String, Double>()
-        get() {
-            updateDownloadIndicator = true
-            return field
-        }
-
     var openCallback: (() -> Unit) = {}
     var githubAuthCallback: ((Map<String, String>) -> Unit) = {}
 
