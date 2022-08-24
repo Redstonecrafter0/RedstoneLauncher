@@ -1,0 +1,15 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="MainKt windows" type="JetRunConfigurationType">
+    <envs>
+      <env name="REDSTONELAUNCHER_TESTING_INSTALLATION_DIR" value="." />
+    </envs>
+    <option name="MAIN_CLASS_NAME" value="net.redstonecraft.redstonelauncher.MainKt" />
+    <module name="RedstoneLauncher.jvmMain" />
+    <shortenClasspath name="NONE" />
+    <option name="VM_PARAMETERS" value="-Dcompose.application.resources.dir=../resources/windows" />
+    <option name="WORKING_DIRECTORY" value="testInstallDir" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

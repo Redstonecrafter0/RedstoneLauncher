@@ -82,26 +82,24 @@ fun AddMicrosoftAccount(addingState: MutableState<Boolean>) {
     Spacer(Modifier.height(5.dp))
 
     OutlinedButton({
-        thread {
-            MSALogin { accessToken, refreshToken, validUntil ->
-                scope.launch {
-                    withContext(Dispatchers.IO) {
-                        user = "" to ""
-                        valid = false
-                        loading = true
-                        var creds = MicrosoftCredentials(accessToken, refreshToken, validUntil, "", 0)
-                        val profile = try {
-                            creds = XBoxApi.login(creds)
-                            MinecraftAPI(creds.minecraftBearer).getProfile()!!
-                        } catch (_: Throwable) {
-                            loading = false
-                            return@withContext
-                        }
-                        msCred = creds
-                        user = profile.name to profile.id
-                        valid = true
+        MSALogin { accessToken, refreshToken, validUntil ->
+            scope.launch {
+                withContext(Dispatchers.IO) {
+                    user = "" to ""
+                    valid = false
+                    loading = true
+                    var creds = MicrosoftCredentials(accessToken, refreshToken, validUntil, "", 0)
+                    val profile = try {
+                        creds = XBoxApi.login(creds)
+                        MinecraftAPI(creds.minecraftBearer).getProfile()!!
+                    } catch (_: Throwable) {
                         loading = false
+                        return@withContext
                     }
+                    msCred = creds
+                    user = profile.name to profile.id
+                    valid = true
+                    loading = false
                 }
             }
         }

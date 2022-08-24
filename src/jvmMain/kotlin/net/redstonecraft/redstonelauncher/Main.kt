@@ -93,17 +93,21 @@ fun main() {
 
         val windowState = WindowState(position = WindowPosition.Aligned(Alignment.Center))
 
+        val isWindows = "windows" in System.getProperty("os.name").lowercase()
+
         if (isOpen) {
             Window(
                 state = windowState,
                 onCloseRequest = { if (Config.save.closeOnExit) exitApplication() else isOpen = false },
                 title = "RedstoneLauncher",
                 icon = loadSvg("icon.svg"),
-                undecorated = true
+                undecorated = isWindows
             ) {
-              Column {
-                    TitleBar("RedstoneLauncher", loadSvg("icon.svg"), windowState) {
-                        if (Config.save.closeOnExit) exitApplication() else isOpen = false
+                Column {
+                    if (isWindows) {
+                        TitleBar("RedstoneLauncher", loadSvg("icon.svg"), windowState) {
+                            if (Config.save.closeOnExit) exitApplication() else isOpen = false
+                        }
                     }
                     App()
                 }

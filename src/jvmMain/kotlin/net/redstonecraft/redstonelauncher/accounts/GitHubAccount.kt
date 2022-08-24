@@ -26,12 +26,11 @@ import net.redstonecraft.redstonelauncher.api.GitHubApi
 import net.redstonecraft.redstonelauncher.credentials.Credentials
 import net.redstonecraft.redstonelauncher.credentials.CredentialsManager
 import net.redstonecraft.redstonelauncher.loadSvg
-import java.awt.Desktop
-import java.net.URI
+import java.io.File
 import java.net.URL
 import java.net.URLEncoder
 import java.security.SecureRandom
-import java.util.Base64
+import java.util.*
 
 @Composable
 fun GitHubAccount(name: String, update: MutableState<Boolean>) {
@@ -86,7 +85,7 @@ fun AddGitHubAccount(addingState: MutableState<Boolean>) {
     OutlinedTextField(account.first, {}, readOnly = true, singleLine = true, label = { Text("Username") }, colors = TextFieldDefaults.textFieldColors(textColor = Color.White))
     Spacer(Modifier.height(5.dp))
     OutlinedButton({
-        Desktop.getDesktop().browse(URI.create("https://github.com/login/oauth/authorize?client_id=c142b194f00f7aeee6ba&scope=repo&state=${state}"))
+        Runtime.getRuntime().exec(File(System.getProperty("compose.application.resources.dir")).listFiles { _, name -> name.startsWith("RedstoneLauncher-Auth-Login") }!![0].resolve("RedstoneLauncher-Auth-Login").canonicalPath + " gh " + state)
     }) {
         Text("Choose Account")
     }

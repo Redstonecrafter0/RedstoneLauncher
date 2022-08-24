@@ -53,7 +53,8 @@ kotlin {
                 }
                 implementation("org.purejava:kdewallet:1.2.7")
                 implementation("net.java.dev.jna:jna:5.12.1")
-                implementation(fileTree(projectDir.resolve("libs")))
+                implementation("org.apache.commons:commons-compress:1.21")
+                implementation("commons-io:commons-io:2.11.0")
             }
         }
     }
@@ -98,7 +99,7 @@ tasks.register("setupEnvironment") {
             resourcesDir.deleteRecursively()
         }
         resourcesDir.mkdirs()
-        val msaLoginDownloadUrl = JsonParser.parseString(URL("https://api.github.com/repos/Redstonecrafter0/RedstoneLauncher-MSA-Frontend/releases").readText())
+        val rlAuthDownloadUrl = JsonParser.parseString(URL("https://api.github.com/repos/Redstonecrafter0/RedstoneLauncher-Auth-Frontend/releases").readText())
             .asJsonArray.filter { !it.asJsonObject["prerelease"].asBoolean }
             .maxByOrNull { ISO8601Utils.parse(it.asJsonObject["published_at"].asString, ParsePosition(0)).time }!!
             .asJsonObject["assets"].asJsonArray.find {
@@ -108,7 +109,7 @@ tasks.register("setupEnvironment") {
                 else -> error("Unknown system")
             } in it.asJsonObject["name"].asString }!!
             .asJsonObject["browser_download_url"].asString
-        TarArchiveInputStream(GzipCompressorInputStream(URL(msaLoginDownloadUrl).openStream())).use {
+        TarArchiveInputStream(GzipCompressorInputStream(URL(rlAuthDownloadUrl).openStream())).use {
             var entry = it.nextEntry
             while (entry != null) {
                 if (!entry.isDirectory) {
@@ -125,7 +126,7 @@ tasks.register("setupEnvironment") {
             }
         }
         if ("linux" in os) {
-            resourcesDir.resolve("RedstoneLauncher-MSA-Login-linux-x64/RedstoneLauncher-MSA-Login").setExecutable(true)
+            resourcesDir.resolve("RedstoneLauncher-Auth-Login-linux-x64/RedstoneLauncher-Auth-Login").setExecutable(true)
         }
         println("done")
     }

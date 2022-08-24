@@ -40,9 +40,9 @@ import net.redstonecraft.redstonelauncher.api.ZuluAPI
 import net.redstonecraft.redstonelauncher.components.ExposedDropDownMenu
 import net.redstonecraft.redstonelauncher.components.ObservedLinearProgressIndicator
 import net.redstonecraft.redstonelauncher.unpackToTempDir
+import org.apache.commons.io.FileUtils
 import org.jetbrains.skia.Image
 import java.io.File
-import java.nio.file.Files
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
@@ -195,7 +195,7 @@ fun AddJavaPage(addingState: MutableState<Boolean>, javaVersions: Map<String, Pa
                             }
                         }
                         if (rootBin != null) {
-                            Files.move(rootBin.toPath(), rootDir.toPath())
+                            FileUtils.moveDirectory(rootBin, rootDir)
                             rootDir.resolve("name.txt").writeText(vendors[vendor])
                             rootDir.resolve("version.txt").writeText(version.version.joinToString("."))
                             if (jdk) {

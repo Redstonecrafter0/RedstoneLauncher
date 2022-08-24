@@ -8,4 +8,5 @@ build
 out
 testInstallDir
 debug.log
-/resources
+/resources/linux
+/resources/windows

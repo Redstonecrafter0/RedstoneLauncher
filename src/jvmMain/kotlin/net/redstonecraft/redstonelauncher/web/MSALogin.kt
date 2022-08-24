@@ -14,7 +14,7 @@ class MSALogin(private val callback: (accessToken: String, refreshToken: String,
 
     init {
         threadPool.submit {
-            val process = ProcessBuilder(File(System.getProperty("compose.application.resources.dir")).listFiles { _, name -> name.startsWith("RedstoneLauncher-MSA-Login") }!![0].resolve("RedstoneLauncher-MSA-Login").canonicalPath).start()
+            val process = ProcessBuilder(File(System.getProperty("compose.application.resources.dir")).listFiles { _, name -> name.startsWith("RedstoneLauncher-Auth-Login") }!![0].resolve("RedstoneLauncher-Auth-Login").canonicalPath, "msa").start()
             val url = process.inputStream.bufferedReader().readLine()
             val data = url.split("#", limit = 2)[1].split("&").associate { it.split("=", limit = 2).let { i -> i[0] to URLDecoder.decode(i[1], Charsets.UTF_8) } }
             if ("error" !in data) {
